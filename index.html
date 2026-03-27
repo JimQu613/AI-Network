@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌈 我的小心情日记</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa, #e4e8f0);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: #333;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        header {
+            background: linear-gradient(90deg, #a78bfa, #ec4899);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 { margin: 0; font-size: 1.8rem; }
+        .mood-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            padding: 20px;
+        }
+        .mood-btn {
+            font-size: 2.5rem;
+            padding: 15px;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #f8fafc;
+        }
+        .mood-btn:hover {
+            transform: scale(1.15);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .history {
+            padding: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            background: #f8fafc;
+        }
+        .entry {
+            padding: 12px;
+            margin-bottom: 8px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        button#encourage {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            background: #7c3aed;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            margin: 20px;
+            width: calc(100% - 40px);
+        }
+        button#encourage:hover {
+            background: #6d28d9;
+        }
+        .encouragement {
+            margin: 20px;
+            padding: 16px;
+            background: #fefce8;
+            border-radius: 12px;
+            font-style: italic;
+            min-height: 60px;
+        }
+        .dark-mode {
+            background: #1f2937;
+            color: #e5e7eb;
+        }
+        .dark-mode .container { background: #374151; }
+        .dark-mode .history { background: #1f2937; }
+        .dark-mode .entry { background: #4b5563; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌈 我的小心情日记</h1>
+            <p>今天你感觉如何？</p>
+        </header>
+        
+        <div class="mood-grid">
+            <button class="mood-btn" data-mood="😊">😊</button>
+            <button class="mood-btn" data-mood="🥰">🥰</button>
+            <button class="mood-btn" data-mood="😌">😌</button>
+            <button class="mood-btn" data-mood="😢">😢</button>
+            <button class="mood-btn" data-mood="😠">😠</button>
+            <button class="mood-btn" data-mood="🤩">🤩</button>
+            <button class="mood-btn" data-mood="😴">😴</button>
+            <button class="mood-btn" data-mood="🔥">🔥</button>
+            <button class="mood-btn" data-mood="😐">😐</button>
+            <button class="mood-btn" data-mood="😱">😱</button>
+        </div>
+        
+        <button id="encourage">✨ 今天需要一点鼓励</button>
+        
+        <div class="encouragement" id="encourage-text">点击按钮获取温暖鼓励～</div>
+        
+        <div class="history">
+            <h3 style="margin-top:0;">📖 最近心情记录</h3>
+            <div id="history-list"></div>
+        </div>
+    </div>
+
+    <script>
+        const historyList = document.getElementById('history-list');
+        const encourageText = document.getElementById('encourage-text');
+        
+        const encouragements = [
+            "你已经很棒了，今天也继续发光吧！🌟",
+            "即使小步前进，也是前进呀～加油！",
+            "世界因为有你而变得更可爱了哦",
+            "今天的不完美，也是明天的故事素材",
+            "深呼吸，你比自己想象的更强大！",
+            "喝口水，笑一个，生活其实没那么糟～",
+            "你正在经历的，正是让你变得更好的过程",
+            "记住：你值得所有美好的事情！"
+        ];
+        
+        function addMood(mood) {
+            const time = new Date().toLocaleTimeString('zh-CN', {hour:'2-digit', minute:'2-digit'});
+            const entry = document.createElement('div');
+            entry.className = 'entry';
+            entry.innerHTML = `<strong>${time}</strong> ${mood}`;
+            historyList.prepend(entry);
+            
+            // 最多保存10条
+            if (historyList.children.length > 10) {
+                historyList.removeChild(historyList.lastChild);
+            }
+            
+            // 保存到 localStorage
+            saveToLocal();
+        }
+        
+        function getRandomEncouragement() {
+            const random = Math.floor(Math.random() * encouragements.length);
+            encourageText.textContent = encouragements[random];
+            encourageText.style.animation = 'none';
+            setTimeout(() => encourageText.style.animation = '', 10);
+        }
+        
+        function saveToLocal() {
+            const entries = Array.from(historyList.children).map(el => el.innerHTML);
+            localStorage.setItem('moodDiary', JSON.stringify(entries));
+        }
+        
+        function loadFromLocal() {
+            const saved = localStorage.getItem('moodDiary');
+            if (saved) {
+                JSON.parse(saved).forEach(html => {
+                    const div = document.createElement('div');
+                    div.className = 'entry';
+                    div.innerHTML = html;
+                    historyList.appendChild(div);
+                });
+            }
+        }
+        
+        // 绑定按钮
+        document.querySelectorAll('.mood-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                addMood(btn.dataset.mood);
+            });
+        });
+        
+        document.getElementById('encourage').addEventListener('click', getRandomEncouragement);
+        
+        // 初始化
+        loadFromLocal();
+        
+        // 添加一点动画样式
+        const style = document.createElement('style');
+        style.innerHTML = `@keyframes pop { 0% {transform: scale(0.8);} 50% {transform: scale(1.1);} 100% {transform: scale(1);} }`;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
