@@ -3,196 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌈 我的小心情日记</title>
+    <title>AI Infrastructure Network • 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
     <style>
-        body {
-            font-family: system-ui, -apple-system, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa, #e4e8f0);
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-            color: #333;
+        body { font-family: system-ui, -apple-system, sans-serif; background: #0f172a; color: #e2e8f0; }
+        .container { max-width: 1280px; margin: 0 auto; padding: 20px; }
+        #network { 
+            height: 720px; 
+            border-radius: 16px; 
+            background: #1e2937; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
         }
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-        header {
-            background: linear-gradient(90deg, #a78bfa, #ec4899);
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        h1 { margin: 0; font-size: 1.8rem; }
-        .mood-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 12px;
-            padding: 20px;
-        }
-        .mood-btn {
-            font-size: 2.5rem;
-            padding: 15px;
-            border: none;
-            border-radius: 16px;
-            cursor: pointer;
-            transition: all 0.2s;
-            background: #f8fafc;
-        }
-        .mood-btn:hover {
-            transform: scale(1.15);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        .history {
-            padding: 20px;
-            max-height: 300px;
-            overflow-y: auto;
-            background: #f8fafc;
-        }
-        .entry {
-            padding: 12px;
-            margin-bottom: 8px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-        button#encourage {
-            width: 100%;
-            padding: 16px;
-            font-size: 1.1rem;
-            background: #7c3aed;
-            color: white;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            margin: 20px;
-            width: calc(100% - 40px);
-        }
-        button#encourage:hover {
-            background: #6d28d9;
-        }
-        .encouragement {
-            margin: 20px;
-            padding: 16px;
-            background: #fefce8;
-            border-radius: 12px;
-            font-style: italic;
-            min-height: 60px;
-        }
-        .dark-mode {
-            background: #1f2937;
-            color: #e5e7eb;
-        }
-        .dark-mode .container { background: #374151; }
-        .dark-mode .history { background: #1f2937; }
-        .dark-mode .entry { background: #4b5563; }
+        .legend { background: #1e2937; padding: 16px; border-radius: 12px; }
+        .node-physical { background: #3b82f6; }
+        .node-tech { background: #8b5cf6; }
+        .node-service { background: #ec4899; }
+        .node-capital { background: #f59e0b; }
     </style>
 </head>
-<body>
+<body class="bg-slate-950">
     <div class="container">
-        <header>
-            <h1>🌈 我的小心情日记</h1>
-            <p>今天你感觉如何？</p>
-        </header>
-        
-        <div class="mood-grid">
-            <button class="mood-btn" data-mood="😊">😊</button>
-            <button class="mood-btn" data-mood="🥰">🥰</button>
-            <button class="mood-btn" data-mood="😌">😌</button>
-            <button class="mood-btn" data-mood="😢">😢</button>
-            <button class="mood-btn" data-mood="😠">😠</button>
-            <button class="mood-btn" data-mood="🤩">🤩</button>
-            <button class="mood-btn" data-mood="😴">😴</button>
-            <button class="mood-btn" data-mood="🔥">🔥</button>
-            <button class="mood-btn" data-mood="😐">😐</button>
-            <button class="mood-btn" data-mood="😱">😱</button>
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-white mb-2">AI Infrastructure Network • 2026</h1>
+            <p class="text-slate-400 text-lg">Interdependent Layers • Capital & Open Tech as "Blood" Flows</p>
         </div>
-        
-        <button id="encourage">✨ 今天需要一点鼓励</button>
-        
-        <div class="encouragement" id="encourage-text">点击按钮获取温暖鼓励～</div>
-        
-        <div class="history">
-            <h3 style="margin-top:0;">📖 最近心情记录</h3>
-            <div id="history-list"></div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Network Visualization -->
+            <div class="lg:col-span-9">
+                <div id="network"></div>
+            </div>
+
+            <!-- Legend & Controls -->
+            <div class="lg:col-span-3 space-y-6">
+                <div class="legend">
+                    <h3 class="text-lg font-semibold mb-4 text-white">Layers</h3>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex items-center gap-3">
+                            <div class="w-5 h-5 rounded node-physical"></div>
+                            <div>
+                                <span class="font-medium">Physical Layer</span><br>
+                                <span class="text-slate-400">Data centers • Power • Cooling • Networking</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-5 h-5 rounded node-tech"></div>
+                            <div>
+                                <span class="font-medium">Technology Layer</span><br>
+                                <span class="text-slate-400">Chips • Models • Frameworks • Algorithms</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-5 h-5 rounded node-service"></div>
+                            <div>
+                                <span class="font-medium">Service Layer</span><br>
+                                <span class="text-slate-400">Cloud • GPUaaS • AI Platforms</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-5 h-5 rounded node-capital"></div>
+                            <div>
+                                <span class="font-medium">Capital Layer</span><br>
+                                <span class="text-slate-400">VC • PE • Debt • Sovereign Funds</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 p-5 rounded-2xl text-sm">
+                    <h4 class="font-semibold mb-3 text-amber-400">Key Insights from Network Theory</h4>
+                    <ul class="space-y-4 text-slate-300">
+                        <li><strong>NVIDIA</strong>: Extremely high Eigenvector Centrality (CUDA ecosystem)</li>
+                        <li><strong>CoreWeave / Equinix</strong>: High Betweenness (bridge nodes)</li>
+                        <li><strong>TSMC</strong>: Critical chokepoint in Physical → Technology flow</li>
+                        <li><strong>CUDA Cluster</strong>: High Homophily → Vulnerable to shocks</li>
+                        <li><strong>Power Utilities</strong>: Emerging bottleneck (2026 reality)</li>
+                    </ul>
+                </div>
+
+                <div class="text-xs text-slate-500 bg-slate-900 p-4 rounded-2xl">
+                    <p class="mb-2 font-medium">How to use:</p>
+                    <p>• Drag nodes to explore connections<br>
+                       • Click a node for details<br>
+                       • Zoom with mouse wheel</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8 text-center text-slate-500 text-sm">
+            AI Infra Network Research Framework • Layers + Flows + Centrality Metrics • March 2026
         </div>
     </div>
 
     <script>
-        const historyList = document.getElementById('history-list');
-        const encourageText = document.getElementById('encourage-text');
-        
-        const encouragements = [
-            "你已经很棒了，今天也继续发光吧！🌟",
-            "即使小步前进，也是前进呀～加油！",
-            "世界因为有你而变得更可爱了哦",
-            "今天的不完美，也是明天的故事素材",
-            "深呼吸，你比自己想象的更强大！",
-            "喝口水，笑一个，生活其实没那么糟～",
-            "你正在经历的，正是让你变得更好的过程",
-            "记住：你值得所有美好的事情！"
-        ];
-        
-        function addMood(mood) {
-            const time = new Date().toLocaleTimeString('zh-CN', {hour:'2-digit', minute:'2-digit'});
-            const entry = document.createElement('div');
-            entry.className = 'entry';
-            entry.innerHTML = `<strong>${time}</strong> ${mood}`;
-            historyList.prepend(entry);
-            
-            // 最多保存10条
-            if (historyList.children.length > 10) {
-                historyList.removeChild(historyList.lastChild);
+        // Nodes
+        const nodes = new vis.DataSet([
+            // Physical Layer (Blue)
+            { id: 1, label: "Hyperscalers\n(MSFT, GOOG, AMZN)", group: "physical", title: "Physical Layer\nData centers, servers, networking" },
+            { id: 2, label: "CoreWeave", group: "physical", title: "Specialized GPU Cloud & Data Center" },
+            { id: 3, label: "Equinix", group: "physical", title: "Interconnection & Colocation" },
+            { id: 4, label: "TSMC", group: "physical", title: "Advanced Semiconductor Manufacturing" },
+            { id: 5, label: "Power Grid\n(NextEra, Utilities)", group: "physical", title: "Energy & Cooling Infrastructure\nMajor 2026 bottleneck" },
+
+            // Technology Layer (Purple)
+            { id: 6, label: "NVIDIA", group: "tech", title: "GPU + CUDA\nHighest Eigenvector Centrality" },
+            { id: 7, label: "AMD / Intel", group: "tech", title: "Alternative Compute" },
+            { id: 8, label: "OpenAI / Anthropic / DeepSeek", group: "tech", title: "Frontier AI Models" },
+            { id: 9, label: "Huawei Ascend", group: "tech", title: "China Domestic Stack" },
+
+            // Service Layer (Pink)
+            { id: 10, label: "AWS / Azure / GCP", group: "service", title: "Hyperscale Cloud Platforms" },
+            { id: 11, label: "CoreWeave / Lambda / Crusoe", group: "service", title: "GPU-as-a-Service Specialists" },
+            { id: 12, label: "AI Platforms\n(Hugging Face, etc.)", group: "service", title: "Model Serving & Tools" },
+
+            // Capital Layer (Orange)
+            { id: 13, label: "Venture Capital\n(a16z, Sequoia, etc.)", group: "capital", title: "Early & Growth Stage Funding" },
+            { id: 14, label: "Sovereign & PE Funds", group: "capital", title: "Large-scale Infrastructure Capital" },
+            { id: 15, label: "Debt Markets\n(Banks, Bonds)", group: "capital", title: "Project Finance & GPU-backed Loans" }
+        ]);
+
+        // Edges (relationships)
+        const edges = new vis.DataSet([
+            // Capital flows to all layers
+            { from: 13, to: 1, label: "Funding", arrows: "to", color: { color: "#fbbf24" } },
+            { from: 13, to: 6, label: "Funding", arrows: "to", color: { color: "#fbbf24" } },
+            { from: 13, to: 10, label: "Funding", arrows: "to", color: { color: "#fbbf24" } },
+            { from: 14, to: 2, label: "Debt + Equity", arrows: "to", color: { color: "#fbbf24" } },
+            { from: 15, to: 5, label: "Project Finance", arrows: "to", color: { color: "#fbbf24" } },
+
+            // Physical → Technology
+            { from: 1, to: 6, label: "Compute Demand", arrows: "to", color: { color: "#60a5fa" } },
+            { from: 4, to: 6, label: "Chips Supply", arrows: "to", color: { color: "#60a5fa" } },
+            { from: 5, to: 1, label: "Power Supply", arrows: "to", color: { color: "#60a5fa" } },
+
+            // Technology → Service
+            { from: 6, to: 10, label: "CUDA Ecosystem", arrows: "to", color: { color: "#c084fc" }, width: 3 },
+            { from: 6, to: 11, label: "GPU Supply", arrows: "to", color: { color: "#c084fc" }, width: 3 },
+            { from: 8, to: 12, label: "Models", arrows: "to", color: { color: "#c084fc" } },
+
+            // Service → Physical (contracts, demand)
+            { from: 10, to: 1, label: "Capacity Contracts", arrows: "to", color: { color: "#f472b6" } },
+            { from: 11, to: 2, label: "Build Demand", arrows: "to", color: { color: "#f472b6" } },
+
+            // Key high-centrality connections
+            { from: 6, to: 8, label: "Training Dependency", arrows: "to", color: { color: "#c084fc" } },
+            { from: 3, to: 10, label: "Interconnection", arrows: "to", color: { color: "#60a5fa" } },
+            { from: 9, to: 11, label: "China Stack", arrows: "to", dashes: true, color: { color: "#94a3b8" } }
+        ]);
+
+        // Network options
+        const options = {
+            nodes: {
+                shape: "dot",
+                size: 28,
+                font: { size: 14, color: "#e2e8f0", face: "system-ui" },
+                borderWidth: 2,
+                shadow: true
+            },
+            edges: {
+                smooth: { type: "curvedCW", roundness: 0.2 },
+                font: { size: 10, align: "middle" },
+                arrows: { to: { enabled: true, scaleFactor: 0.8 }}
+            },
+            groups: {
+                physical: { color: { background: "#3b82f6", border: "#1e40af" }, borderWidth: 3 },
+                tech:     { color: { background: "#8b5cf6", border: "#6b21a8" }, borderWidth: 3 },
+                service:  { color: { background: "#ec4899", border: "#9f1239" }, borderWidth: 3 },
+                capital:  { color: { background: "#f59e0b", border: "#b45309" }, borderWidth: 3 }
+            },
+            physics: {
+                stabilization: { iterations: 200 },
+                barnesHut: { gravitationalConstant: -8000, centralGravity: 0.4 }
+            },
+            interaction: { hover: true, tooltipDelay: 100 }
+        };
+
+        // Create network
+        const container = document.getElementById("network");
+        const data = { nodes: nodes, edges: edges };
+        const network = new vis.Network(container, data, options);
+
+        // Click handler for node details
+        network.on("click", function(params) {
+            if (params.nodes.length > 0) {
+                const nodeId = params.nodes[0];
+                const node = nodes.get(nodeId);
+                alert(`Node: ${node.label.replace(/\n/g, " ")}\n\n${node.title}`);
             }
-            
-            // 保存到 localStorage
-            saveToLocal();
-        }
-        
-        function getRandomEncouragement() {
-            const random = Math.floor(Math.random() * encouragements.length);
-            encourageText.textContent = encouragements[random];
-            encourageText.style.animation = 'none';
-            setTimeout(() => encourageText.style.animation = '', 10);
-        }
-        
-        function saveToLocal() {
-            const entries = Array.from(historyList.children).map(el => el.innerHTML);
-            localStorage.setItem('moodDiary', JSON.stringify(entries));
-        }
-        
-        function loadFromLocal() {
-            const saved = localStorage.getItem('moodDiary');
-            if (saved) {
-                JSON.parse(saved).forEach(html => {
-                    const div = document.createElement('div');
-                    div.className = 'entry';
-                    div.innerHTML = html;
-                    historyList.appendChild(div);
-                });
-            }
-        }
-        
-        // 绑定按钮
-        document.querySelectorAll('.mood-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                addMood(btn.dataset.mood);
-            });
         });
-        
-        document.getElementById('encourage').addEventListener('click', getRandomEncouragement);
-        
-        // 初始化
-        loadFromLocal();
-        
-        // 添加一点动画样式
-        const style = document.createElement('style');
-        style.innerHTML = `@keyframes pop { 0% {transform: scale(0.8);} 50% {transform: scale(1.1);} 100% {transform: scale(1);} }`;
-        document.head.appendChild(style);
+
+        // Double click to zoom/focus
+        network.on("doubleClick", function(params) {
+            if (params.nodes.length > 0) {
+                network.focus(params.nodes[0], { scale: 1.8, animation: true });
+            }
+        });
     </script>
 </body>
 </html>
